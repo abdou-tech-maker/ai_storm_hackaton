@@ -7,10 +7,12 @@ const Color mainColor1 = Color(0xFF008AFF);
 const Color mainColor = Color(0xFF1547FF);
 
 const Color liteTxt = Color(0xFFB9BCBE);
+const Color darkPurple = Color(0xFF25185D);
 
 const Color blackText = Color(0xFF121212);
 const Color backGround = Color(0xFFEDF2FF);
 const Color redColor = Color(0xFFD8192C);
+const Color ayorColor = Color(0xFF6A61F2);
 
 const Color greyBackGround = Color(0xFFAFB2B8);
 const Color gradientGray = Color.fromARGB(255, 255, 255, 255);

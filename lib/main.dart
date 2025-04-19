@@ -1,4 +1,4 @@
-import 'package:ai_storm_hackaton/on_boarding/welcome_screen.dart';
+import 'package:ai_storm_hackaton/main_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: false,
       ),
-      home: const WelcomeScreen(),
+      home: const MainScreen(),
     );
   }
 }
