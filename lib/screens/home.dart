@@ -1,9 +1,8 @@
-import 'dart:developer';
-
-import 'package:ai_storm_hackaton/api.dart';
+import 'package:ai_storm_hackaton/bloc/action/action_cubit.dart';
 import 'package:ai_storm_hackaton/constantes/constantes.dart';
 import 'package:ai_storm_hackaton/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -99,66 +98,108 @@ class _HomeState extends State<Home> {
             left: 100,
             right: 100,
             height: 60,
-            child: InkWell(
-              onTap: () {
-                authenticate("patrickloops808@gmail.com", "Maystro808")
-                    .then((_) {
-                  execute(prompt.text).then((response) {
-                    // Handle the response here
-                    log('Response: $response');
-                  }).catchError((error) {
-                    // Handle error
-                    log(error);
-                  });
-                }).catchError((error) {
-                  // Handle authentication error
-                  log(error);
-                });
+            child: BlocConsumer<ActionCubit, ActionState>(
+              listener: (context, state) {
+                if (state is ActionError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.message)),
+                  );
+                }
+                if (state is ActionSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Done: ${state.response}')),
+                  );
+                }
               },
-              child: Container(
-                height: 44,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                decoration: ShapeDecoration(
-                  color: const Color(0xFFCBFCFA),
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 3,
-                      color: Color(0xFF2E45E0),
+              builder: (context, state) {
+                if (state is ActionLoading) {
+                  return Container(
+                    height: 44,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 12),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFCBFCFA),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          width: 3,
+                          color: Color(0xFF2E45E0),
+                        ),
+                        borderRadius: BorderRadius.circular(51),
+                      ),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x7C5E73FF),
+                          blurRadius: 14.60,
+                          offset: Offset(0, 0),
+                          spreadRadius: 0,
+                        )
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(51),
-                  ),
-                  shadows: const [
-                    BoxShadow(
-                      color: Color(0x7C5E73FF),
-                      blurRadius: 14.60,
-                      offset: Offset(0, 0),
-                      spreadRadius: 0,
-                    )
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/images/sparkles.svg',
-                      width: 24,
-                      height: 24,
-                    ),
-                    const Text(
-                      'Apply Actions',
-                      style: TextStyle(
-                        color: Color(0xFF2E45E0),
-                        fontSize: 20,
-                        fontFamily: 'Satoshi',
-                        fontWeight: FontWeight.w700,
+                    child: const SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                        color: ayorColor,
+                        strokeWidth: 2,
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  );
+                }
+                return InkWell(
+                  onTap: () {
+                    BlocProvider.of<ActionCubit>(context)
+                        .login("patrickloops808@gmail.com", "Maystro808")
+                        .then((_) {
+                      BlocProvider.of<ActionCubit>(context)
+                          .execute(prompt.text);
+                    });
+                  },
+                  child: Container(
+                    height: 44,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 12),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFCBFCFA),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          width: 3,
+                          color: Color(0xFF2E45E0),
+                        ),
+                        borderRadius: BorderRadius.circular(51),
+                      ),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x7C5E73FF),
+                          blurRadius: 14.60,
+                          offset: Offset(0, 0),
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/sparkles.svg',
+                          width: 24,
+                          height: 24,
+                        ),
+                        const Text(
+                          'Apply Actions',
+                          style: TextStyle(
+                            color: Color(0xFF2E45E0),
+                            fontSize: 18,
+                            fontFamily: 'Satoshi',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ))
       ]),
     );

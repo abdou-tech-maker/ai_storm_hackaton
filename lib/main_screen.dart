@@ -1,8 +1,5 @@
 // ignore_for_file: file_names
 
-import 'dart:developer';
-
-import 'package:ai_storm_hackaton/api.dart';
 import 'package:ai_storm_hackaton/constantes/constantes.dart';
 import 'package:ai_storm_hackaton/screens/home.dart';
 import 'package:flutter/material.dart';
@@ -25,18 +22,9 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     tabController = PersistentTabController(initialIndex: 1);
 
-    authenticate("patrickloops808@gmail.com", "Maystro808").then((_) {
-      execute("Create a new task for me").then((response) {
-        // Handle the response here
-        log('Response: $response');
-      }).catchError((error) {
-        // Handle error
-        log(error);
-      });
-    }).catchError((error) {
-      // Handle authentication error
-      log(error);
-    });
+    // context
+    //     .read<ActionCubit>()
+    //     .login("patrickloops808@gmail.com", "Patrickloops808@");
   }
 
   List<PersistentTabConfig> _navBarsItems() => [
